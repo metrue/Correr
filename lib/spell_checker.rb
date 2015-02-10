@@ -1,7 +1,22 @@
 class SpellChecker
-  def self.correct(word)
+  def self.correct_on_text(text)
+    # ++
+    # should notice that correction happend right on the origin text
+    # ++ 
+    correct = {}
+    text.scan(/\w+/).each do |word|
+       correct[word] =  SpellChecker.correct_on_word(word)
+    end
+
+    correct.each_pair do |key, val|
+      text.gsub!(key, val)
+    end
+    text
+  end
+
+  def self.correct_on_word(word)
     @LETTERS = ('a'..'z').to_a.join
-    @NWORDS = train(words(File.new('holmes.txt').read))
+    @NWORDS = train(words(File.new('./lib/holmes.txt').read))
 
     (known([word]) or known(edits1(word)) or known_edits2(word) or
       [word]).max {|a,b| @NWORDS[a] <=> @NWORDS[b] }
@@ -19,7 +34,7 @@ class SpellChecker
 
   # ++
   # get all the words with edit_distance == 1
-  # a n-length word edit_distance == 1 include:
+  # a n-length word edit_distance == 1 nclude:
   #   a. deletion (n)
   #   b. transpositon (n-1)
   #   c. insertion (26(n+1))
