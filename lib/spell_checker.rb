@@ -35,8 +35,9 @@ class SpellChecker
   #   d. alteration (25n)
   # ++
   def edits1(word)
-    result = deletion(word) + transposition(word) + alteration(word) + 
-     insertion(word)
+    length = word.length
+    result = deletion(word, length) + transposition(word, length) + alteration(word, length) + 
+     insertion(word, length)
     result.empty? ? nil : result
   end
 
@@ -50,24 +51,21 @@ class SpellChecker
     result.empty? ? nil : result
   end
 
-  def deletion(word)
-    n = word.length
-    (0...n).collect do |i| 
+  def deletion(word, word_length)
+    (0...word_length).collect do |i| 
       word[0...i] + word[ i + 1..-1] 
     end
   end
 
-  def transposition(word)
-    n = word.length
-    (0...n-1).collect do |i|
+  def transposition(word, word_length)
+    (0...word_length-1).collect do |i|
       word[0...i] + word[i+1,1] + word[i,1] + word[i+2..-1]
     end
   end
 
-  def alteration(word)
-    n = word.length
+  def alteration(word, word_length)
     alteration = []
-    n.times do |i| 
+    word_length.times do |i| 
       @letters.each_byte do |l| 
         alteration << word[0...i]+l.chr+word[i+1..-1]
       end
@@ -75,10 +73,9 @@ class SpellChecker
     alteration
   end
 
-  def insertion(word)
-    n = word.length
+  def insertion(word, word_length)
     insertion = []
-    (n+1).times do |i| 
+    (word_length+1).times do |i| 
       @letters.each_byte do |l| 
         insertion << word[0...i]+l.chr+word[i..-1] 
       end
