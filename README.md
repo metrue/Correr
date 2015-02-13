@@ -1,6 +1,2 @@
-a spell check tool in ruby
+typo_checker is a tool to check your type in the comments of source code.
 
-
-#### inspired by
-* http://blog.youxu.info/spell-correct.html
-* https://www.ruby-forum.com/topic/104327
