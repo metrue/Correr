@@ -1,19 +1,13 @@
 #!/usr/bin/env ruby
 
 require_relative './lib/spell_checker'
+require_relative './lib/model'
 require_relative './lib/comment_getter'
 
 require "optparse"
 
-def correction(text:)
-  text.scan(/\w+/).each do |word|
-     correct[word] =  SpellChecker.correct(word)
-  end
-
-  correct.each_pair do |key, val|
-    text.gsub!(key, val)
-  end
-end
+model = Model.new(base_text: './lib/holmes.txt')
+spell_checker = SpellChecker.new(model: model)
 
 options = {}
 OptionParser.new do |opts|
@@ -35,7 +29,7 @@ original_comments = CommentGetter.on(file: options['file'],
                                      type: 'ruby')
 correct = {}
 original_comments.each do |comment_line|
-  correct[comment_line] = SpellChecker.correct_on_text(comment_line.clone)
+  correct[comment_line] = spell_checker.correct_on_text(comment_line.clone)
 end
 
 str = File.read(options['file'])
