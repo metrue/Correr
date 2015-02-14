@@ -33,10 +33,10 @@ EOF
   end
 
   it "should be able to get comments from python source code file" do
-   # expect(CommentGetter.on(file:@python_file, type:'python')).to eq('')
+    expect(CommentGetter.on(file:@python_file, type:'python')).to eq('')
   end
 
   it "should be able to get comments from C/C++ source code file" do
-    expect(CommentGetter.on(file:@c_file, type:'c')).to eq('')
+   # expect(CommentGetter.on(file:@c_file, type:'c')).to eq('')
   end
 end
