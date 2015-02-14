@@ -12,6 +12,8 @@ class CommentGetter
       comments_of_perl(file)
     when 'shell'
       comments_of_shell(file)
+    when 'javascript'
+      comments_of_c(file)
     when 'c'
       comments_of_c(file)
     when 'c++'
@@ -27,7 +29,9 @@ class CommentGetter
   def self.comments_of_ruby(source_file)
     comments = []
     File.readlines(source_file).each do |line|
-      if line =~ /(\#.*)$/
+      if line =~ /^#\!/
+        next
+      elsif line =~ /(\#.*)$/
         comments << line
       end    
     end  
@@ -55,7 +59,9 @@ class CommentGetter
     comments = []
     multi_comment = false
     File.readlines(source_file).each do |line|
-      if multi_comment == false && line =~ /'''/
+      if line =~ /^#\!/
+        next
+      elsif multi_comment == false && line =~ /'''/
         # ++
         # multi comment start
         # ++
