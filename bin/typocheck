@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require "optparse"
+require "typocheck"
+
 BIN_PATH = File.expand_path(File.dirname($0))
 LIB_PATH = File.expand_path(File.join(BIN_PATH, "../lib"))
 TOOLS_PATH = File.expand_path(File.join(BIN_PATH, "../tools"))
