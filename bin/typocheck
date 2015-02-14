@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 
 require "optparse"
-require_relative './lib/spell_checker'
-require_relative './lib/comment_getter'
-require_relative './lib/model'
+BIN_PATH = File.expand_path(File.dirname($0))
+LIB_PATH = File.expand_path(File.join(BIN_PATH, "../lib"))
+TOOLS_PATH = File.expand_path(File.join(BIN_PATH, "../tools"))
 
+Dir[File.join(LIB_PATH, "*.rb")].each do |file|
+  require file
+end
 
 options = {}
 OptionParser.new do |opts|
@@ -35,10 +38,10 @@ if options[:type] == nil
 end
 
 if options[:expert]
-  model = Model.new(base_text: './lib/big.txt')
+  model = Model.new(base_text: File.join(LIB_PATH, "big.txt"))
   spell_checker = SpellChecker.new(model: model)
 else
-  model = Model.new(base_text: './lib/holmes.txt')
+  model = Model.new(base_text: File.join(LIB_PATH, "holmes.txt"))
   spell_checker = SpellChecker.new(model: model)
 end
 
@@ -65,4 +68,4 @@ end
 # ++
 # show the nice diff between original file and corrected file
 # ++
-system("tools/icdiff #{file_name} #{file_name}.corrected")
+system(File.join(TOOLS_PATH, "icdiff") + " #{file_name} #{file_name}.corrected")
