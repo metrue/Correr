@@ -1,23 +1,21 @@
-### ctc
+### typocheck
 
-comments typo checking tool in Ruby
+comments typo checking tool
 
 ==========
 
 ### Usage
 
 ```
-Install ctc via gem
-  $ gem install ctc
 Check typo for a source code 
-  $ ctc -f helloword.rb
+  $ bin/typocheck -f helloword.rb
 Get more help with
-  $ ctc -h 
+  $ bin/typocheck -h 
 ```
 
 ### License
 
-ctc is published under MIT License
+typocheck is published under MIT License
 
 Copyright (c) 2014 Minghe Huang (@metrue)
 	
