@@ -7,12 +7,12 @@ comments typo checking tool in Ruby
 ### Usage
 
 ```
+Install ctc via gem
   $ gem install ctc
-  
+Check typo for a source code 
   $ ctc -f helloword.rb
-or
+Get more help with
   $ ctc -h 
-to get help
 ```
 
 ### License
