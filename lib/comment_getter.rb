@@ -4,19 +4,19 @@ class CommentGetter
     case type
     when 'plain'
       File.read(file)
-    when 'ruby'
+    when 'ruby','rb'
       comments_of_ruby(file)
-    when 'python'
+    when 'python','py'
       comments_of_python(file)
-    when 'perl'
+    when 'perl','pl'
       comments_of_perl(file)
-    when 'shell'
+    when 'shell','sh'
       comments_of_shell(file)
-    when 'javascript'
+    when 'javascript','js'
       comments_of_c(file)
-    when 'c'
+    when 'c','h'
       comments_of_c(file)
-    when 'c++'
+    when 'c++','cpp','cxx'
       comments_of_cpp(file)
     else
       File.read(file)
