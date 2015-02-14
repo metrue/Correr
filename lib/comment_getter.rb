@@ -12,6 +12,8 @@ class CommentGetter
       comments_of_perl(file)
     when 'shell'
       comments_of_shell(file)
+    when 'javascript'
+      comments_of_c(file)
     when 'c'
       comments_of_c(file)
     when 'c++'
