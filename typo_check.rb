@@ -5,8 +5,6 @@ require_relative './lib/spell_checker'
 require_relative './lib/comment_getter'
 require_relative './lib/model'
 
-model = Model.new(base_text: './lib/holmes.txt')
-spell_checker = SpellChecker.new(model: model)
 
 options = {}
 OptionParser.new do |opts|
@@ -19,21 +17,34 @@ OptionParser.new do |opts|
   opts.on("-f", "--file ", "file name") do |value|
     options[:file] = value
   end
+
+  opts.on("-e", "--expert", "expert mode, slower but more correct") do |value|
+    options[:expert] = value
+  end
 end.parse!
 
 if options[:file] == nil
   system("#{$0} -h")
   exit 0
-elsif options[:type] == nil
+else
   file_name = options[:file]
+end
+
+if options[:type] == nil
   file_type = File.extname(options[:file]).sub(/^\./, '')
+end
+
+if options[:expert]
+  model = Model.new(base_text: './lib/big.txt')
+  spell_checker = SpellChecker.new(model: model)
+else
+  model = Model.new(base_text: './lib/holmes.txt')
+  spell_checker = SpellChecker.new(model: model)
 end
 
 # ++
 # get comments from source code file
 # ++
-puts file_name
-puts file_type
 original_comments = CommentGetter.on(file: file_name, type: file_type)
 correct = {}
 original_comments.each do |comment_line|
