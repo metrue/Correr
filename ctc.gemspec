@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.description = "ctc, a comments typo checking tool for Ruby, Python, Javascript, Perl, Shell, C/C++"
   s.author      = "Minghe Huang"
   s.email       = "h.mignhe@gmail.com"
-  s.files       = Dir["lib/*", "test/*", "README.md", "ctc.gemspec", "ctc"]
+  s.files       = Dir["lib/*", "README.md", "ctc.gemspec", "ctc"]
   s.homepage    = "http://minghe.me"
   s.license     = "MIT"
 end
