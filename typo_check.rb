@@ -1,10 +1,9 @@
 #!/usr/bin/env ruby
 
-require_relative './lib/spell_checker'
-require_relative './lib/model'
-require_relative './lib/comment_getter'
-
 require "optparse"
+require_relative './lib/spell_checker'
+require_relative './lib/comment_getter'
+require_relative './lib/model'
 
 model = Model.new(base_text: './lib/holmes.txt')
 spell_checker = SpellChecker.new(model: model)
@@ -25,8 +24,9 @@ end.parse!
 # ++
 # get comments from source code file
 # ++
+puts options
 original_comments = CommentGetter.on(file: options['file'], 
-                                     type: 'ruby')
+                                     type: options['type'])
 correct = {}
 original_comments.each do |comment_line|
   correct[comment_line] = spell_checker.correct_on_text(comment_line.clone)
@@ -47,18 +47,3 @@ end
 # show the nice diff between original file and corrected file
 # ++
 system("tools/icdiff #{options['file']} #{options['file']}.corrected")
-
-__END__
-correct = {}
-File.read('README.md').scan(/\w+/).each do |word|
-   correct[word] =  SpellChecker.correct(word)
-end
-
-str = File.read('README.md')
-correct.each_pair do |key, val|
-  str.gsub!(key, val)
-end
-
-File.open('readme.md.bak', 'w') do |f|
-  f.write str
-end
