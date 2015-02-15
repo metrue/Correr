@@ -6,11 +6,29 @@ comments typo checking tool
 
 ### Usage
 
+Check typo for words
+
 ```
-Check typo for a source code 
-  $ bin/typocheck -f helloword.rb
+  $ ./typocheck.rb -w gdd,blessm,me
+```
+
+Check typo for files
+
+```
+  $ ./typocheck.rb -f file1,file2,...
+```
+
 Get more help with
-  $ bin/typocheck -h 
+
+```
+  $ ./typocheck.rb -h 
+```
+
+Or install with RubyGems
+
+```
+  $ gem install typocheck
+  $ typocheck -h # to get help before start
 ```
 
 ### License
