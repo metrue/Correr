@@ -2,8 +2,8 @@ class CommentGetter
   def self.on(file:, type:)
     type ||= 'plain'
     case type
-    when 'plain'
-      File.read(file)
+    when 'plain','md','markdown'
+      [File.read(file)]
     when 'ruby','rb'
       comments_of_ruby(file)
     when 'python','py'
@@ -19,7 +19,7 @@ class CommentGetter
     when 'c++','cpp','cxx'
       comments_of_cpp(file)
     else
-      File.read(file)
+      [File.read(file)]
     end
   end
 

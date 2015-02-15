@@ -21,6 +21,8 @@ class SpellChecker
   end
 
   def correct_on_word(word)
+    return word if word.upcase == word
+    return word if word[0].upcase == word[0] 
     (known([word]) or known(edits1(word)) or known_edits2(word) or
       [word]).max {|a,b| @model.tf[a] <=> @model.tf[b] }
   end
