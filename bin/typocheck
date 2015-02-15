@@ -14,59 +14,68 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: typo_check.rb a commandline tool to check your typo"
 
-  opts.on("-t", "--type ", "File type, plain, ruby, python, c, c++") do |value|
+  opts.on("--type ", "File type, plain, ruby, python, c, c++") do |value|
     options[:type] = value
   end
 
-  opts.on("-f", "--file ", "file name") do |value|
-    options[:file] = value
+  opts.on("--files file1,file2,...", Array, "files need to check") do |value|
+    options[:files] = value
   end
 
-  opts.on("-e", "--expert", "expert mode, slower but more correct") do |value|
-    options[:expert] = value
+  opts.on("--words word1, word2,.. ", Array, "words need to check") do |value|
+    options[:words] = value
   end
 end.parse!
 
-if options[:file] == nil
+if options[:files] == nil && options[:words] == nil
   system("#{$0} -h")
   exit 0
-else
-  file_name = options[:file]
 end
 
-if options[:type] == nil
-  file_type = File.extname(options[:file]).sub(/^\./, '')
-end
 
-if options[:expert]
-  model = Model.new(base_text: File.join(LIB_PATH, "big.txt"))
-  spell_checker = SpellChecker.new(model: model)
-else
-  model = Model.new(base_text: File.join(LIB_PATH, "holmes.txt"))
-  spell_checker = SpellChecker.new(model: model)
+model = Model.new(base_text: File.join(LIB_PATH, "big.txt"))
+spell_checker = SpellChecker.new(model: model)
+
+# ++
+# correct given words
+# ++
+if options[:words]
+  options[:words].each do |word|
+    correct = spell_checker.correct_on_word(word)
+    printf("%-20s\t-->\t%20s\n", word, correct)
+  end
+  exit 0
 end
 
 # ++
-# get comments from source code file
+# correct given files
 # ++
-original_comments = CommentGetter.on(file: file_name, type: file_type)
-correct = {}
-original_comments.each do |comment_line|
-  correct[comment_line] = spell_checker.correct_on_text(comment_line.clone)
-end
-
-str = File.read(file_name)
-correct.each_pair do |key, value|
+options[:files].each do |file|
+  if options[:type] == nil
+    file_type = File.extname(file).sub(/^\./, '')
+  end
   # ++
-  # gsub! with happen on origin string, gsub will not
+  # get comments from source code file
   # ++
-  str.gsub!(key, value)
-end
-File.open("#{file_name}.corrected", "w") do |f|
-  f.puts str
-end
+  original_comments = CommentGetter.on(file: file, type: file_type)
+  correct = {}
+  original_comments.each do |comment_line|
+    correct[comment_line] = spell_checker.correct_on_text(comment_line.clone)
+  end
 
-# ++
-# show the nice diff between original file and corrected file
-# ++
-system(File.join(TOOLS_PATH, "icdiff") + " #{file_name} #{file_name}.corrected")
+  str = File.read(file)
+  correct.each_pair do |key, value|
+    # ++
+    # gsub! with happen on origin string, gsub will not
+    # ++
+    str.gsub!(key, value)
+  end
+  File.open("#{file}.corrected", "w") do |f|
+    f.puts str
+  end
+
+  # ++
+  # show the nice diff between original file and corrected file
+  # ++
+  system(File.join(TOOLS_PATH, "icdiff") + " #{file} #{file}.corrected")
+end

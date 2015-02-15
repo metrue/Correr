@@ -2,7 +2,7 @@ class CommentGetter
   def self.on(file:, type:)
     type ||= 'plain'
     case type
-    when 'plain'
+    when 'plain','md','markdown'
       [File.read(file)]
     when 'ruby','rb'
       comments_of_ruby(file)
