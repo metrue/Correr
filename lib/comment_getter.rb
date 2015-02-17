@@ -61,23 +61,23 @@ class CommentGetter
     File.readlines(source_file).each do |line|
       if line =~ /^#\!/
         next
-      elsif multi_comment == false && line =~ /'''/
+      elsif multi_comment == false && line =~ /"""/
         # ++
         # multi comment start
         # ++
         comments << line
         multi_comment = true
-      elsif multi_comment == false && line !~ /'''/
+      elsif multi_comment == false && line !~ /"""/
         if line =~ /\s*(#.*)$/
           comments << line
         end
-      elsif multi_comment == true && line =~ /'''/
+      elsif multi_comment == true && line =~ /"""/
         # ++
         # multi comment end
         # ++
         comments << line
         multi_comment = false
-      elsif multi_comment == true && line !~ /'''/
+      elsif multi_comment == true && line !~ /"""/
         comments << line
       end
     end
